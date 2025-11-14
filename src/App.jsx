@@ -1,33 +1,42 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { useState } from 'react';
 import './App.css'
+import SearchBar from './components/SearchBar'
+import axios from 'axios';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [weather, setWeather] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  const API_KEY = import.meta.env.VITE_API_KEY;
+  const API_URL = `https://api.openweathermap.org/data/2.5/weather`;
+
+  const fetchWeather = async (city) => {
+    setLoading(true)
+    setError('')
+    try {
+      const url = `${API_URL}?q=${city}&units=metric&appid=${API_KEY}`;
+      const response = await axios.get(url);
+      console.log(response.data);
+      setWeather(response.data)
+    } catch (err) {
+      if(err.response && err.response.status === 404) {
+        setError('City not found. Please try again.')
+      } else {
+        setError('An error ocurred. Please try again later')
+      }
+    }
+    setWeather(null)
+  }
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+      <div className='min-h-screen flex flex-col items-center justify-center bg-blue-100'>
+        <div className='bg-black/90 text-white rounded-lg shadow-lg p-8 max-w-md w-full'>
+          <h1 className='text-3xl font-bold text-center mb-6'>Weather App</h1>
+          <SearchBar fetchWeather={fetchWeather} />
+        </div>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </>
   )
 }
