@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 
-const SearchBar = (fetchWeather) => {
+const SearchBar = ({fetchWeather}) => {
     const [city, setCity] = useState("");
+    let trimedCity = city.trim();
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (city) {
-            fetchWeather(city.trim());
+        if (trimedCity) {
+            fetchWeather(trimedCity);
             setCity('')
         }
     }
