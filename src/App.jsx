@@ -26,8 +26,10 @@ function App() {
       } else {
         setError('An error ocurred. Please try again later')
       }
+      setWeather(null)
+    } finally {
+      setLoading(false)
     }
-    setWeather(null)
   }
   return (
     <>
@@ -36,11 +38,13 @@ function App() {
           <h1 className='text-3xl font-bold text-center mb-6'>Weather App</h1>
 
           <SearchBar fetchWeather={fetchWeather} />
+          {loading && <p className='text-center mt-4'>Loading...</p>}
+          {error && <p className='text-red-500 text-center mt-4'>{error}</p> }
           {weather && <WeatherCard weather={weather} />}
         </div>
       </div>
     </>
   )
-}
+};
 
-export default App
+export default App;
