@@ -2,6 +2,7 @@ import { useState } from 'react';
 import './App.css'
 import SearchBar from './components/SearchBar'
 import axios from 'axios';
+import WeatherCard from './components/WeatherCard';
 
 function App() {
   const [weather, setWeather] = useState(null);
@@ -35,6 +36,7 @@ function App() {
           <h1 className='text-3xl font-bold text-center mb-6'>Weather App</h1>
 
           <SearchBar fetchWeather={fetchWeather} />
+          {weather && <WeatherCard weather={weather} />}
         </div>
       </div>
     </>
